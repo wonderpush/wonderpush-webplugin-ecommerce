@@ -80,8 +80,13 @@
       };
 
       var exitHandler = function() {
-        var product = getProductJson();
+        if (!product) return;
         trackEvent('Exit', { object_product: productJsonToWonderPushJson(product) });
+      };
+
+      var purchaseHandler = function() {
+        var product = getProductJson();
+        trackEvent('Purchase', product ? { object_product: productJsonToWonderPushJson(product) } : undefined);
       };
 
       // Register handlers
@@ -118,6 +123,9 @@
       setInterval(function() {
         if (window.location.href === url) return;
         url = window.location.href;
+        if (options.thankYouPageUrl && window.location.pathname === options.thankYouPageUrl) {
+          purchaseHandler();
+        }
         registerHandlers();
       }, 1000);
 
