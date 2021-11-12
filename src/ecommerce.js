@@ -44,6 +44,9 @@
       };
 
       var productJsonToWonderPushJson = function(product) {
+        var price = parseFloat(product.offers.price);
+        if (isNaN(price)) price = null;
+
         return ({
           string_type: product['@type'],
           string_image: product.image && product.image.length && product.image[0] || undefined,
@@ -53,9 +56,9 @@
           string_gtin13: product.gtin13,
           object_offers: product.offers ? {
             string_type: product.offers['@type'],
-            string_price: product.offers.price,
+            float_price: price,
             string_priceCurrency: product.offers.priceCurrency,
-            string_priceValidUntil: product.offers.priceValidUntil,
+            date_priceValidUntil: product.offers.priceValidUntil,
             string_url: product.offers.url,
             string_itemCondition: product.offers.itemCondition,
             string_availability: product.offers.availability,
@@ -123,7 +126,7 @@
       setInterval(function() {
         if (window.location.href === url) return;
         url = window.location.href;
-        if (options.thankYouPageUrl && window.location.pathname === options.thankYouPageUrl) {
+        if (options.thankYouPageUrl && (""+window.location.pathname).indexOf(options.thankYouPageUrl) >= 0) {
           purchaseHandler();
         }
         registerHandlers();
