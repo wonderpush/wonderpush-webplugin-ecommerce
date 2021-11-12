@@ -47,6 +47,8 @@
         var price = parseFloat(product.offers.price);
         if (isNaN(price)) price = null;
 
+        var cleanup = function(s) { return (s||"").replace(/^https?:\/\/schema.org\//, ''); };
+
         return ({
           string_type: product['@type'],
           string_image: product.image && product.image.length && product.image[0] || undefined,
@@ -60,8 +62,8 @@
             string_priceCurrency: product.offers.priceCurrency,
             date_priceValidUntil: product.offers.priceValidUntil,
             string_url: product.offers.url,
-            string_itemCondition: product.offers.itemCondition,
-            string_availability: product.offers.availability,
+            string_itemCondition: cleanup(product.offers.itemCondition),
+            string_availability: cleanup(product.offers.availability),
           } : undefined,
           object_brand: product.brand ? {
             string_name: product.brand.name || undefined,
