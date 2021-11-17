@@ -85,6 +85,7 @@
       };
 
       var exitHandler = function() {
+        var product = getProductJson();
         if (!product) return;
         trackEvent('Exit', { object_product: productJsonToWonderPushJson(product) });
       };
