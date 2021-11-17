@@ -8,7 +8,7 @@
    */
   /**
    * @typedef {Object} Ecommerce.Options
-   * @property {string} [thankYouPageUrl] - The path to your purchase thank-you page. Should start with /. Example: /thank-you.html
+   * @property {string} [thankYouPageUrl] - A pattern contained the URL of your thank-you page, no wildcards. Be careful not to match other pages.
    * @property {string} [addToCartButtonQuerySelector] - A query selector that matches your add-to-cart button(s) with document.querySelectorAll. See https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
    * @property {string} [removeFromCartButtonQuerySelector] - A query selector that matches your remove-from or empty cart button(s) with document.querySelectorAll. See https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
    */
@@ -129,7 +129,7 @@
       setInterval(function() {
         if (window.location.href === url) return;
         url = window.location.href;
-        if (options.thankYouPageUrl && (""+window.location.pathname).indexOf(options.thankYouPageUrl) >= 0) {
+        if (options.thankYouPageUrl && (""+window.location.href).indexOf(options.thankYouPageUrl) >= 0) {
           purchaseHandler();
         }
         registerHandlers();
