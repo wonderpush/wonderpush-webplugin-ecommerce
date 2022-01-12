@@ -75,24 +75,36 @@
       var addToCartHandler = function() {
         var product = getProductJson();
         if (!product) return;
-        trackEvent('AddToCart', { object_product: productJsonToWonderPushJson(product) });
+        trackEvent('AddToCart', {
+          object_product: productJsonToWonderPushJson(product),
+          string_url: window.location.href,
+        });
       };
 
       var removeFromCartHandler = function() {
         var product = getProductJson();
         if (!product) return;
-        trackEvent('RemoveFromCart', { object_product: productJsonToWonderPushJson(product) });
+        trackEvent('RemoveFromCart', {
+          object_product: productJsonToWonderPushJson(product),
+          string_url: window.location.href,
+        });
       };
 
       var exitHandler = function() {
         var product = getProductJson();
         if (!product) return;
-        trackEvent('Exit', { object_product: productJsonToWonderPushJson(product) });
+        trackEvent('Exit', {
+          object_product: productJsonToWonderPushJson(product),
+          string_url: window.location.href,
+        });
       };
 
       var purchaseHandler = function() {
         var product = getProductJson();
-        trackEvent('Purchase', product ? { object_product: productJsonToWonderPushJson(product) } : undefined);
+        trackEvent('Purchase', product ? {
+          object_product: productJsonToWonderPushJson(product),
+          string_url: window.location.href,
+        } : undefined);
       };
 
       // Register handlers
