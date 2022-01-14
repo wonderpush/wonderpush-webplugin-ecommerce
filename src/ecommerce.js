@@ -90,9 +90,19 @@
         });
       };
 
+      var lastExitEventDate;
+      var lastExitEventUrl;
       var exitHandler = function() {
         var product = getProductJson();
         if (!product) return;
+        // Fire at most every 5 minutes for a given url
+        if (lastExitEventUrl === window.location.href
+          && lastExitEventDate
+          && (+new Date() - lastExitEventDate.getTime()) < 10000/*5 * 60000*/) {
+          return;
+        }
+        lastExitEventDate = new Date();
+        lastExitEventUrl = window.location.href;
         trackEvent('Exit', {
           object_product: productJsonToWonderPushJson(product),
           string_url: window.location.href,
