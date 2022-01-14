@@ -98,7 +98,7 @@
         // Fire at most every 5 minutes for a given url
         if (lastExitEventUrl === window.location.href
           && lastExitEventDate
-          && (+new Date() - lastExitEventDate.getTime()) < 10000/*5 * 60000*/) {
+          && (+new Date() - lastExitEventDate.getTime()) < 5 * 60000) {
           return;
         }
         lastExitEventDate = new Date();
