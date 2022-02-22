@@ -22,6 +22,12 @@
       window.WonderPush = window.WonderPush || [];
       options = options || {};
 
+      var sanitize = function(s) {
+        if (!s) return s;
+        var stripped = s.replace(/(<([^>]+)>)/gi, "");
+        return stripped.length > 120 ? stripped.substr(0, 119) + '…' : stripped;
+      };
+
       var lastEventTracked;
       var trackEvent = function(type, data) {
         // Discard duplicate events
@@ -52,8 +58,8 @@
         return ({
           string_type: product['@type'],
           string_image: product.image && product.image.length && product.image[0] || undefined,
-          string_name: product.name,
-          string_description: product.description,
+          string_name: sanitize(product.name),
+          string_description: sanitize(product.description),
           string_sku: product.sku,
           string_gtin13: product.gtin13,
           object_offers: product.offers ? {
