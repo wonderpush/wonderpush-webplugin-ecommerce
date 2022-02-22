@@ -102,9 +102,7 @@
         var product = getProductJson();
         if (!product) return;
         // Fire at most every 5 minutes for a given url
-        if (lastExitEventUrl === window.location.href
-          && lastExitEventDate
-          && (+new Date() - lastExitEventDate.getTime()) < 5 * 60000) {
+        if (lastExitEventUrl === window.location.href && lastExitEventDate && (+new Date() - lastExitEventDate.getTime()) < 5 * 60000) {
           return;
         }
         lastExitEventDate = new Date();
