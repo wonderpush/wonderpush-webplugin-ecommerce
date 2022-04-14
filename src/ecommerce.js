@@ -119,6 +119,10 @@
       };
 
       var purchaseHandler = function() {
+        // Do nothing if thankYouPageUrl isn't configured or if it isn't present in the current URL
+        if (!options.thankYouPageUrl || (""+window.location.href).indexOf(options.thankYouPageUrl) < 0) {
+          return;
+        }
         var product = getProductJson();
         trackEvent('Purchase', product ? {
           object_product: productJsonToWonderPushJson(product),
@@ -160,12 +164,11 @@
       setInterval(function() {
         if (window.location.href === url) return;
         url = window.location.href;
-        if (options.thankYouPageUrl && (""+window.location.href).indexOf(options.thankYouPageUrl) >= 0) {
-          purchaseHandler();
-        }
+        purchaseHandler();
         registerHandlers();
       }, 1000);
 
+      purchaseHandler();
       registerHandlers();
     }
   });
