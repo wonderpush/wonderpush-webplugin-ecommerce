@@ -59,9 +59,7 @@
         return ({
           string_type: product['@type'],
           string_image: (
-            (product.image && Array.isArray(product.image))
-              ? (product.image.length && product.image[0])
-              : (typeof product.image === 'string' ? product.image : undefined)
+            (product.image && Array.isArray(product.image)) ? (product.image.length && product.image[0]) : (typeof product.image === 'string' ? product.image : undefined)
           ) || undefined,
           string_name: sanitize(product.name),
           string_description: sanitize(product.description),
