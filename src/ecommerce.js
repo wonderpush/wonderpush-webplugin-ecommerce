@@ -1,7 +1,7 @@
 (function () {
 
   /**
-   * WonderPush E-commerce plugin 
+   * WonderPush E-commerce plugin
    * @class Ecommerce
    * @param {external:WonderPushPluginSDK} WonderPushSDK - The WonderPush SDK instance provided automatically on intanciation.
    * @param {Ecommerce.Options} options - The plugin options.
@@ -44,6 +44,7 @@
             try {
               return JSON.parse(_.textContent);
             } catch (e) {
+              console.warn('[WonderPush] unable to parse ld+json data, e-commerce features might not work as expected', e);
               return {};
             }
           }).find(function(_) { return _['@type'] === 'Product'; });
