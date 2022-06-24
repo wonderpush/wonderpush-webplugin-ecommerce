@@ -47,7 +47,7 @@
               console.warn('[WonderPush] unable to parse ld+json data, e-commerce features might not work as expected', e);
               return {};
             }
-          }).find(function(_) { return _['@type'] === 'Product'; });
+          }).find(function(_) { return _['@type'] === 'Product' || _['@type'] === 'http://schema.org/Product'; });
       };
 
       var productJsonToWonderPushJson = function(product) {
