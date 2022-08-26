@@ -42,7 +42,10 @@
         return Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
           .map(function(_) {
             try {
-              return JSON.parse(_.textContent);
+              var textContent = _.textContent || '';
+              // Replace line breaks with spaces to make parsing more robust
+              textContent = textContent.replace(/\n+/g, ' ');
+              return JSON.parse(textContent);
             } catch (e) {
               console.warn('[WonderPush] unable to parse ld+json data, e-commerce features might not work as expected', e);
               return {};
