@@ -48,14 +48,14 @@
               textContent = textContent.replace(/\n+/g, ' ');
               var item = JSON.parse(textContent);
               if (Array.isArray(item)) {
-                item.forEach(x => objs.push(x));
+                item.forEach(function(x) { objs.push(x); });
               } else {
                 objs.push(item);
               }
             } catch (e) {
               console.warn('[WonderPush] unable to parse ld+json data, e-commerce features might not work as expected', e);
             }
-          })
+          });
         return objs.find(function(_) { return _['@type'] === 'Product' || _['@type'] === 'http://schema.org/Product'; });
       };
 
