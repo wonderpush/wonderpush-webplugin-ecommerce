@@ -1,6 +1,6 @@
 {
   "name": "wonderpush-webplugin-ecommerce",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "WonderPush Web SDK plugin for E-commerce lets you integrate your E-commerce website seamlessly with WonderPush.",
   "main": "src/ecommerce.js",
   "repository": {
