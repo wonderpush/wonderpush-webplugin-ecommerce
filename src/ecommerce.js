@@ -39,18 +39,24 @@
       };
 
       var getProductJson = function() {
-        return Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
-          .map(function(_) {
+        var objs = [];
+        Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+          .forEach(function(_) {
             try {
               var textContent = _.textContent || '';
               // Replace line breaks with spaces to make parsing more robust
               textContent = textContent.replace(/\n+/g, ' ');
-              return JSON.parse(textContent);
+              var item = JSON.parse(textContent);
+              if (Array.isArray(item)) {
+                item.forEach(x => objs.push(x));
+              } else {
+                objs.push(item);
+              }
             } catch (e) {
               console.warn('[WonderPush] unable to parse ld+json data, e-commerce features might not work as expected', e);
-              return {};
             }
-          }).find(function(_) { return _['@type'] === 'Product' || _['@type'] === 'http://schema.org/Product'; });
+          })
+        return objs.find(function(_) { return _['@type'] === 'Product' || _['@type'] === 'http://schema.org/Product'; });
       };
 
       var productJsonToWonderPushJson = function(product) {
