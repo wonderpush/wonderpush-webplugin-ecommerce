@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/wonderpush/wonderpush-webplugin-ecommerce#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "@babel/core": "^7.20.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.18.9",
+    "@babel/preset-env": "^7.20.2",
     "del": "^4.1.1",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
