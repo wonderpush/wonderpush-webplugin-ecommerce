@@ -22,14 +22,14 @@
       window.WonderPush = window.WonderPush || [];
       options = options || {};
 
-      var sanitize = function(s) {
+      const sanitize = function(s) {
         if (!s) return s;
-        var stripped = s.replace(/(<([^>]+)>)/gi, "");
+        const stripped = s.replace(/(<([^>]+)>)/gi, "");
         return stripped.length > 120 ? stripped.substr(0, 119) + '…' : stripped;
       };
 
-      var lastEventTracked;
-      var trackEvent = function(type, data) {
+      let lastEventTracked;
+      const trackEvent = function(type, data) {
         // Discard duplicate events
         if (lastEventTracked && lastEventTracked.type === type && lastEventTracked.data && lastEventTracked.data.object_product && lastEventTracked.data.object_product.string_sku && data && data.object_product && data.object_product.string_sku === lastEventTracked.data.object_product.string_sku) {
           return;
@@ -38,15 +38,15 @@
         window.WonderPush.push(['trackEvent', type, data]);
       };
 
-      var getProductJson = function() {
-        var objs = [];
+      const getProductJson = function() {
+        const objs = [];
         Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
           .forEach(function(_) {
             try {
-              var textContent = _.textContent || '';
+              let textContent = _.textContent || '';
               // Replace line breaks with spaces to make parsing more robust
               textContent = textContent.replace(/\n+/g, ' ');
-              var item = JSON.parse(textContent);
+              const item = JSON.parse(textContent);
               if (Array.isArray(item)) {
                 item.forEach(function(x) { objs.push(x); });
               } else {
@@ -59,16 +59,16 @@
         return objs.find(function(_) { return _['@type'] === 'Product' || _['@type'] === 'http://schema.org/Product'; });
       };
 
-      var productJsonToWonderPushJson = function(product) {
+      const productJsonToWonderPushJson = function(product) {
         const offer = Array.isArray(product.offers) ? product.offers[0] : product.offers;
         let price = parseFloat(offer?.price);
         if (isNaN(price)) price = null;
 
-        var cleanup = function(s) { return (s||"").replace(/^https?:\/\/schema.org\//, ''); };
-        var cleanupDateString = function(dateString) {
+        const cleanup = function(s) { return (s||"").replace(/^https?:\/\/schema.org\//, ''); };
+        const cleanupDateString = function(dateString) {
           if (!dateString) return undefined;
           try {
-            var d = new Date(dateString);
+            const d = new Date(dateString);
             if (isNaN(d)) return undefined;
             return d.toISOString();
           } catch (e) {}
@@ -98,8 +98,8 @@
         });
       };
 
-      var addToCartHandler = function() {
-        var product = getProductJson();
+      const addToCartHandler = function() {
+        const product = getProductJson();
         if (!product) return;
         trackEvent('AddToCart', {
           object_product: productJsonToWonderPushJson(product),
@@ -107,8 +107,8 @@
         });
       };
 
-      var removeFromCartHandler = function() {
-        var product = getProductJson();
+      const removeFromCartHandler = function() {
+        const product = getProductJson();
         if (!product) return;
         trackEvent('RemoveFromCart', {
           object_product: productJsonToWonderPushJson(product),
@@ -116,10 +116,10 @@
         });
       };
 
-      var lastExitEventDate;
-      var lastExitEventUrl;
-      var exitHandler = function() {
-        var product = getProductJson();
+      let lastExitEventDate;
+      let lastExitEventUrl;
+      const exitHandler = function() {
+        const product = getProductJson();
         if (!product) return;
         // Fire at most every 5 minutes for a given url
         if (lastExitEventUrl === window.location.href && lastExitEventDate && (+new Date() - lastExitEventDate.getTime()) < 5 * 60000) {
@@ -133,12 +133,12 @@
         });
       };
 
-      var purchaseHandler = function() {
+      const purchaseHandler = function() {
         // Do nothing if thankYouPageUrl isn't configured or if it isn't present in the current URL
         if (!options.thankYouPageUrl || (""+window.location.href).indexOf(options.thankYouPageUrl) < 0) {
           return;
         }
-        var product = getProductJson();
+        const product = getProductJson();
         trackEvent('Purchase', product ? {
           object_product: productJsonToWonderPushJson(product),
           string_url: window.location.href,
@@ -146,9 +146,9 @@
       };
 
       // Register handlers
-      var registeredHandlers = [];
-      var connectionCheckInterval;
-      var registerHandlers = function() {
+      const registeredHandlers = [];
+      let connectionCheckInterval;
+      const registerHandlers = function() {
         if (connectionCheckInterval) clearInterval(connectionCheckInterval);
         const register = function(query, handler) {
           if (!handler) return;
@@ -167,7 +167,7 @@
         if (options.addToCartButtonQuerySelector) register(options.addToCartButtonQuerySelector, addToCartHandler);
         if (options.removeFromCartButtonQuerySelector) register(options.removeFromCartButtonQuerySelector, removeFromCartHandler);
         connectionCheckInterval = setInterval(function() {
-          var disconnected = registeredHandlers.find(function(x) {
+          const disconnected = registeredHandlers.find(function(x) {
             return !x.elt.isConnected;
           });
           if (disconnected) registerHandlers();
@@ -181,7 +181,7 @@
       });
 
       // Listen for URL changes
-      var url = window.location.href;
+      let url = window.location.href;
       setInterval(function() {
         if (window.location.href === url) return;
         url = window.location.href;
