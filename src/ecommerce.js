@@ -60,7 +60,8 @@
       };
 
       var productJsonToWonderPushJson = function(product) {
-        var price = parseFloat(product.offers.price);
+        const offer = Array.isArray(product.offers) ? product.offers[0] : product.offers;
+        let price = parseFloat(offer?.price);
         if (isNaN(price)) price = null;
 
         var cleanup = function(s) { return (s||"").replace(/^https?:\/\/schema.org\//, ''); };
@@ -81,14 +82,14 @@
           string_description: sanitize(product.description),
           string_sku: product.sku,
           string_gtin13: product.gtin13,
-          object_offers: product.offers ? {
-            string_type: product.offers['@type'],
+          object_offers: offer ? {
+            string_type: offer['@type'],
             float_price: price,
-            string_priceCurrency: product.offers.priceCurrency,
-            date_priceValidUntil: cleanupDateString(product.offers.priceValidUntil),
-            string_url: product.offers.url,
-            string_itemCondition: cleanup(product.offers.itemCondition),
-            string_availability: cleanup(product.offers.availability),
+            string_priceCurrency: offer.priceCurrency,
+            date_priceValidUntil: cleanupDateString(offer.priceValidUntil),
+            string_url: offer.url,
+            string_itemCondition: cleanup(offer.itemCondition),
+            string_availability: cleanup(offer.availability),
           } : undefined,
           object_brand: product.brand ? {
             string_name: product.brand.name || undefined,
