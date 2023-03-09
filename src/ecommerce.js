@@ -147,25 +147,31 @@
 
       // Register handlers
       var registeredHandlers = [];
+      var connectionCheckInterval;
       var registerHandlers = function() {
-        var register = function(query, handler) {
+        if (connectionCheckInterval) clearInterval(connectionCheckInterval);
+        const register = function(query, handler) {
           if (!handler) return;
           Array.from(document.querySelectorAll(query)).forEach(function (elt) {
             elt.addEventListener('click', handler);
-            registeredHandlers.push([elt, handler]);
+            registeredHandlers.push({elt: elt, handler:handler});
           });
         };
         // Un-register previous handlers
         registeredHandlers.forEach(function(e) {
-          var elt = e[0];
-          var h = e[1];
-          if (elt && h) {
-            elt.removeEventListener('click', h);
+          if (e.elt && e.handler) {
+            e.elt.removeEventListener('click', e.handler);
           }
         });
-        registeredHandlers = [];
+        registeredHandlers.splice();
         if (options.addToCartButtonQuerySelector) register(options.addToCartButtonQuerySelector, addToCartHandler);
         if (options.removeFromCartButtonQuerySelector) register(options.removeFromCartButtonQuerySelector, removeFromCartHandler);
+        connectionCheckInterval = setInterval(function() {
+          var disconnected = registeredHandlers.find(function(x) {
+            return !x.elt.isConnected;
+          });
+          if (disconnected) registerHandlers();
+        }, 1000);
       };
 
       document.addEventListener('mouseout', function(e) {
