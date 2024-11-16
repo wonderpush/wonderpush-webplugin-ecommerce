@@ -73,11 +73,14 @@
             return d.toISOString();
           } catch (e) {}
         };
+        let image;
+        if (product.image) {
+          const imageObject = Array.isArray(product.image) ? product.image[0] : product.image;
+          image = typeof imageObject === 'string' ? imageObject : typeof imageObject === 'object' ? imageObject.contentUrl : undefined;
+        }
         return ({
           string_type: product['@type'],
-          string_image: (
-            (product.image && Array.isArray(product.image)) ? (product.image.length && product.image[0]) : (typeof product.image === 'string' ? product.image : undefined)
-          ) || undefined,
+          string_image: image,
           string_name: sanitize(product.name),
           string_description: sanitize(product.description),
           string_sku: product.sku,
