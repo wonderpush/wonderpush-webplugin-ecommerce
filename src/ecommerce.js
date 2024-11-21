@@ -24,6 +24,7 @@
 
       const sanitize = function(s) {
         if (!s) return s;
+        if (typeof s !== 'string') return undefined;
         const stripped = s.replace(/(<([^>]+)>)/gi, "");
         return stripped.length > 120 ? stripped.substr(0, 119) + '…' : stripped;
       };
@@ -79,24 +80,24 @@
           image = typeof imageObject === 'string' ? imageObject : typeof imageObject === 'object' ? imageObject.contentUrl : undefined;
         }
         return ({
-          string_type: product['@type'],
-          string_image: image,
+          string_type: typeof product['@type'] === 'string' ? product['@type'] : undefined,
+          string_image: typeof image === 'string' ? image : undefined,
           string_name: sanitize(product.name),
           string_description: sanitize(product.description),
-          string_sku: product.sku,
-          string_gtin13: product.gtin13,
+          string_sku: typeof product.sku === 'string' ? product.sku : undefined,
+          string_gtin13: typeof product.gtin13 === 'string' ? product.gtin13 : undefined,
           object_offers: offer ? {
-            string_type: offer['@type'],
-            float_price: price,
-            string_priceCurrency: offer.priceCurrency,
+            string_type: typeof offer['@type'] === 'string' ? offer['@type'] : undefined,
+            float_price: typeof price === 'number' ? price : undefined,
+            string_priceCurrency: typeof offer.priceCurrency === 'string' ? offer.priceCurrency : undefined,
             date_priceValidUntil: cleanupDateString(offer.priceValidUntil),
-            string_url: offer.url,
+            string_url: typeof offer.url === 'string' ? offer.url : undefined,
             string_itemCondition: cleanup(offer.itemCondition),
             string_availability: cleanup(offer.availability),
           } : undefined,
           object_brand: product.brand ? {
-            string_name: product.brand.name || undefined,
-            string_type: product.brand['@type'] || undefined,
+            string_name: typeof product.brand.name === 'string' ? (product.brand.name || undefined) : undefined,
+            string_type: typeof product.brand['@type'] === 'string' ? (product.brand['@type'] || undefined) : undefined,
           } : undefined,
         });
       };
